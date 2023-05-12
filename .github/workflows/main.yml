@@ -26,9 +26,9 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
-            docker build -t waivedinbackend:latest .
-            docker tag waivedinbackend:latest waivedin.azurecr.io/waivedin-backend:${{ github.sha }}
-            docker push waivedin.azurecr.io/waivedin-backend:${{ github.sha }}
+            docker build -t waivedinsocket:latest .
+            docker tag waivedinsocket:latest waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
+            docker push waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
         
         - name: executing remote ssh commands using password
           uses: appleboy/ssh-action@master
