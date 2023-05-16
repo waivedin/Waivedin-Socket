@@ -36,5 +36,3 @@ jobs:
            host: ${{ secrets.STAGING_SSH_HOST }}
            username: ${{ secrets.STAGING_SSH_USER }}
            key: ${{ secrets.SSH_KEY }}
-           script: |
-                    bash pull.bash ${{ github.sha }}
