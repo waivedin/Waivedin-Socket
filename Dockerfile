@@ -1,13 +1,13 @@
 FROM node:18-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package.json  /usr/src/app/
+COPY /app
 
 RUN npm install --force
 
-ENV NODE_ENV production
+EXPOSE 3000
 
-COPY . /usr/src/app/
+CMD npm start
 
-CMD [ "node", "dist/main.js" ]
+
