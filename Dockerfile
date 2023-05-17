@@ -10,6 +10,4 @@ ENV NODE_ENV production
 
 COPY . /usr/src/app/
 
-RUN npm run build
-
 CMD [ "node", "dist/main.js" ]
