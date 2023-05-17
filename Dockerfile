@@ -2,11 +2,9 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY /app
+COPY /usr/src/app/
 
 RUN npm install --force
-
-COPY /app
 
 EXPOSE 3000
 
