@@ -8,7 +8,6 @@ const {
 
 
 const connection = async (server) => {
-    global.io = require('socket.io')(server);
     io.sockets.on("connection", (socket) => {
         console.log("Socket connected-----socketId-----",socket.id)
         socket.emit("connect_server",{})
