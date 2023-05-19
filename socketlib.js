@@ -11,7 +11,7 @@ const connection = async () => {
     io.sockets.on("connection", (socket) => {
         console.log("Socket connected-----socketId-----",socket.id)
         socket.emit("connect_server",{})
-        socket.on("client_connect", async (data) => {
+        socket.on("client_server", async (data) => {
             try {
                 console.log("client_connect emitted:",JSON.stringify(data))
                 console.log("socket.id emitted:",socket)
@@ -26,7 +26,7 @@ const connection = async () => {
                 let res = await messageModel.create({
                     conversationId : new ObjectId(data.conversationId),
                     createdBy : new ObjectId(data.from),
-                    media_type : data.media_type?data.media_type:0,
+                    media_type : data.media_type,
                     text : data.text,
                     mediaURL : data.mediaURL?data.mediaURL:"",
                     createdDate: data.timestamp,
