@@ -1,8 +1,8 @@
 FROM node:18-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY . /usr/src/app/
+COPY . /app
 
 RUN npm install --force
 
