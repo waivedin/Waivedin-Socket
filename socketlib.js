@@ -10,7 +10,7 @@ const {
 const connection = async () => {
     io.sockets.on("connection", (socket) => {
         console.log("Socket connected-----socketId-----",socket.id)
-        socket.emit("connect")
+        socket.emit("connect_server",{})
         socket.on("client_connect", async (data) => {
             try {
                 console.log("client_connect emitted:",JSON.data)
