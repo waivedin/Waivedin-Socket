@@ -7,7 +7,8 @@ const {
 } = require('mongoose').Types
 
 
-const connection = async () => {
+const connection = async (server) => {
+    global.io = require('socket.io')(server);
     io.sockets.on("connection", (socket) => {
         console.log("Socket connected-----socketId-----",socket.id)
         socket.emit("connect_server",{})
@@ -35,7 +36,10 @@ const connection = async () => {
                 await conversationModel.updateOne({_id: new ObjectId(data.conversationId)},{$set:{modifiedDate: data.timestamp}})
                 console.log("insert response----only res", res)
                 console.log("insert response", res._id)
-                socket.emit("receive_message",{msg_id: res._id,...data});
+                let receiver = await userModel.findOne({_id: new ObjectId(data.to),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+                if(receiver && receiver.socketId && receiver.socketId != ""){
+                    io.to(receiver.socketId).emit("receive_message",{msg_id: receiver._id,...data})
+                }
             } catch (e) {
                 console.log(e)
             }
