@@ -27,7 +27,7 @@ const connection = async () => {
                     conversationId : new ObjectId(data.conversationId),
                     createdBy : new ObjectId(data.from),
                     media_type : data.media_type,
-                    text : data.text,
+                    text : data.message,
                     mediaURL : data.mediaURL?data.mediaURL:"",
                     createdDate: data.timestamp,
                     modifiedDate: data.timestamp
