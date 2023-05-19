@@ -42,7 +42,7 @@ const connection = async () => {
         });
 
         socket.on("disconnect_client", async(data)=>{
-            console.log("Disconnect method:",JSON.stringfy(data))
+            console.log("Disconnect method:",JSON.stringify(data))
             await userModel.updateOne({_id: ObjectId(data.user_id)},{$set: {socketId: ""}}).catch(e=> console.log("query",e))
         })
 
