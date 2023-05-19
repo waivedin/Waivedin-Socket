@@ -48,7 +48,7 @@ const connection = async () => {
 
         socket.on("disconnect", async (data) => {
             try {
-                console.log("Socket disconnected", JSON.stringify(socket))
+                console.log("Socket disconnected", socket)
             } catch (e) {
                 console.log(e)
             }
