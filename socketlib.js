@@ -23,7 +23,7 @@ const connection = async () => {
         });
         socket.on("send_message", async (data) => {
             try {
-                let res = await messageModel.insertOne({
+                let res = await messageModel.create({
                     conversationId : new ObjectId(data.conversationId),
                     createdBy : new ObjectId(data.from),
                     media_type : data.media_type?data.media_type:0,
