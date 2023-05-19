@@ -14,8 +14,8 @@ const connection = async () => {
         socket.on("client_connect", async (data) => {
             try {
                 console.log("client_connect emitted:",JSON.data)
-                console.log("socket.id emitted:",JSON.stringify(socket))
-                // console.log("socket.id emitted:",socket.id)
+                console.log("socket.id emitted:",socket)
+                console.log("socket.id emitted:",socket.id)
                 await userModel.updateOne({_id: ObjectId(data.user_id)},{$set: {socketId: socket.id}}).catch(e=> console.log("query",e))
             } catch (e) {
                 console.log(e)
