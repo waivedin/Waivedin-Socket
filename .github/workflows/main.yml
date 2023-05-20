@@ -29,6 +29,16 @@ jobs:
             docker build -t waivedinsocket:latest .
             docker tag waivedinsocket:latest waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
             docker push waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
+         
+      # Pull the image from Azure Container Registry
+        - name: 'Pull image'
+          run: |
+            docker pull waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
+
+      # Run the image
+        - name: 'Run Docker container'
+          run: |
+            docker run -d -p 3000:3000 waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }} 
         
         - name: executing remote ssh commands using password
           uses: appleboy/ssh-action@master
@@ -36,5 +46,3 @@ jobs:
            host: ${{ secrets.STAGING_SSH_HOST }}
            username: ${{ secrets.STAGING_SSH_USER }}
            key: ${{ secrets.SSH_KEY }}
-           script: |
-                    bash pull1.bash ${{ github.sha }}
