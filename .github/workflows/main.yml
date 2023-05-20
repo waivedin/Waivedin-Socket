@@ -35,14 +35,14 @@ jobs:
           run: |
             docker pull waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
 
-      # Run the image
-        - name: 'Run Docker container'
-          run: |
-            docker run -d -p 3000:3000 waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }} 
-        
+            
         - name: executing remote ssh commands using password
           uses: appleboy/ssh-action@master
           with:
            host: ${{ secrets.STAGING_SSH_HOST }}
            username: ${{ secrets.STAGING_SSH_USER }}
            key: ${{ secrets.SSH_KEY }}
+           script: |
+            docker stop waivedin-socket || true
+            docker rm waivedin-socket || true
+            docker run -d -p 3000:3000 --name waivedin-socket waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
