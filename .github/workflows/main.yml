@@ -37,4 +37,4 @@ jobs:
            username: ${{ secrets.STAGING_SSH_USER }}
            key: ${{ secrets.SSH_KEY }}
            script: |
-                    bash pull.bash ${{ github.sha }}
+                    bash pull1.bash ${{ github.sha }}
