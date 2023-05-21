@@ -9,3 +9,7 @@ exports.connectDatabase = () => {
     connectTimeoutMS: 10000
   })
 }
+
+exports.getDate = () => {
+  return Math.trunc(new Date().getTime() / 1000)
+}
