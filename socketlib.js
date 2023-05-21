@@ -51,6 +51,7 @@ const connection = async (server) => {
 
         socket.on("create_comment", async (data) => {
             try {
+                console.log("create comment request body:---",JSON.stringify(data))
                 let postId = new ObjectId(data.postId)
                 let res = await commentModel.create({
                     postId,
