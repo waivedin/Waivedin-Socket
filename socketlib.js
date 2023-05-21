@@ -2,6 +2,9 @@ const socket = require('socket.io');
 const userModel = require('./model/users');
 const messageModel = require('./model/message');
 const conversationModel = require('./model/conversation');
+const commentModel = require('./model/comment');
+const postModel = require('./model/post');
+const commonFunction = require('./commonFunction');
 const {
     ObjectId
 } = require('mongoose').Types
@@ -11,6 +14,7 @@ const connection = async (server) => {
     io.sockets.on("connection", (socket) => {
         console.log("Socket connected-----socketId-----",socket.id)
         socket.emit("connect_server",{})
+        
         socket.on("client_server", async (data) => {
             try {
                 console.log("client_connect emitted:",JSON.stringify(data))
@@ -21,6 +25,7 @@ const connection = async (server) => {
                 console.log(e)
             }
         });
+
         socket.on("send_message", async (data) => {
             try {
                 let res = await messageModel.create({
@@ -43,6 +48,31 @@ const connection = async (server) => {
                 console.log(e)
             }
         });
+
+        socket.on("create_comment", async (data) => {
+            try {
+                console.log("create comment request body:---",JSON.stringify(data))
+                let postId = new ObjectId(data.postId)
+                let res = await commentModel.create({
+                    postId,
+                    createdBy : new ObjectId(data.userId),
+                    comment : data.comment,
+                    createdDate: commonFunction.getDate(),
+                    modifiedDate: commonFunction.getDate()
+                })
+                let postRes = await postModel.findOneAndUpdate({_id: postId}, {$inc:{commentCount: 1}})
+                let userRes = await userDetails.findOne({_id: postRes.createdBy,socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+                console.log("insert response----only res", res)
+                console.log("insert response", res._id)
+                if(userRes && userRes.socketId && userRes.socketId != ""){
+                    io.to(userRes.socketId).emit("receive_message",{commentId: res._id,...data})
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        });
+
+
 
         socket.on("disconnect_client", async(data)=>{
             console.log("Disconnect method:",JSON.stringify(data))
