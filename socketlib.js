@@ -41,7 +41,7 @@ const connection = async (server) => {
                 console.log("insert response----only res", res)
                 console.log("insert response", res._id)
                 let receiver = await userModel.findOne({_id: new ObjectId(data.to),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
-                let senderRes = await userDetails.findOne({_id: new ObjectId(data.from),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+                let senderRes = await userModel.findOne({_id: new ObjectId(data.from),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 if(receiver && receiver.socketId && receiver.socketId != ""){
                     console.log("Receiver received")
                     io.to(receiver.socketId).emit("receive_message",{msg_id: receiver._id,...data})
@@ -67,8 +67,8 @@ const connection = async (server) => {
                     modifiedDate: commonFunction.getDate()
                 })
                 let postRes = await postModel.findOneAndUpdate({_id: postId}, {$inc:{commentCount: 1}})
-                let receiverRes = await userDetails.findOne({_id: postRes.createdBy,socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
-                let senderRes = await userDetails.findOne({_id: new ObjectId(data.userId),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+                let receiverRes = await userModel.findOne({_id: postRes.createdBy,socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+                let senderRes = await userModel.findOne({_id: new ObjectId(data.userId),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 console.log("insert response----only res", res)
                 console.log("insert response", res._id)
                 if(receiverRes && receiverRes.socketId && receiverRes.socketId != ""){
