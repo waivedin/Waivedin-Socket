@@ -48,7 +48,7 @@ const connection = async (server) => {
                 }
                 if(senderRes && senderRes.socketId && senderRes.socketId != ""){
                     console.log("Sender received")
-                    io.to(senderRes.socketId).emit("receive_message",{commentId: res._id,...data})
+                    io.to(senderRes.socketId).emit("receive_message",{msg_id: receiver._id,...data})
                 }
             } catch (e) {
                 console.log(e)
