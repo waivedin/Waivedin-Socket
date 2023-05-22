@@ -61,11 +61,17 @@ const connection = async (server) => {
                     modifiedDate: commonFunction.getDate()
                 })
                 let postRes = await postModel.findOneAndUpdate({_id: postId}, {$inc:{commentCount: 1}})
-                let userRes = await userDetails.findOne({_id: postRes.createdBy,socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+                let receiverRes = await userDetails.findOne({_id: postRes.createdBy,socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+                let senderRes = await userDetails.findOne({_id: new ObjectId(data.userId),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 console.log("insert response----only res", res)
                 console.log("insert response", res._id)
-                if(userRes && userRes.socketId && userRes.socketId != ""){
-                    io.to(userRes.socketId).emit("receive_message",{commentId: res._id,...data})
+                if(receiverRes && receiverRes.socketId && receiverRes.socketId != ""){
+                    console.log("Receiver received")
+                    io.to(receiverRes.socketId).emit("receive_message",{commentId: res._id,...data})
+                }
+                if(senderRes && senderRes.socketId && senderRes.socketId != ""){
+                    console.log("Sender received")
+                    io.to(senderRes.socketId).emit("receive_message",{commentId: res._id,...data})
                 }
             } catch (e) {
                 console.log(e)
