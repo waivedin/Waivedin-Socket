@@ -44,11 +44,11 @@ const connection = async (server) => {
                 let senderRes = await userModel.findOne({_id: new ObjectId(data.from),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 if(receiver && receiver.socketId && receiver.socketId != ""){
                     console.log("Receiver received")
-                    io.to(receiver.socketId).emit("receive_message",{msg_id: receiver._id,...data})
+                    io.to(receiver.socketId).emit("receive_message",{msg_id: res._id,...data})
                 }
                 if(senderRes && senderRes.socketId && senderRes.socketId != ""){
                     console.log("Sender received")
-                    io.to(senderRes.socketId).emit("receive_message",{commentId: res._id,...data})
+                    io.to(senderRes.socketId).emit("receive_message",{msg_id: res._id,...data})
                 }
             } catch (e) {
                 console.log(e)
