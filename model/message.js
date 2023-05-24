@@ -37,6 +37,11 @@ const MessageSchema = new Schema({
         type: Boolean,
         default: true
     },
+    messageDelivered: {
+        type: Number,
+        default: 0,
+        enum: [0, 1]
+    },
 });
 
 

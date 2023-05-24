@@ -30,6 +30,7 @@ const connection = async (server) => {
             try {
                 console.log("send message data:", JSON.stringify(data))
                 data.media_type = data['mediaType'] = data.media_type ? data.media_type : 0
+                data.messageDelivered = 0
                 let res = await messageModel.create({
                     conversationId : new ObjectId(data.conversationId),
                     createdBy : new ObjectId(data.from),
@@ -39,7 +40,8 @@ const connection = async (server) => {
                     thumbNail : data.thumbNail?data.thumbNail:"",
                     createdDate: data.timestamp,
                     modifiedDate: data.timestamp,
-                    isDelivered: data.media_type != 3 ? true : false
+                    isDelivered: data.media_type != 3 ? true : false,
+                    messageDelivered: data.messageDelivered
                 })
                 await conversationModel.updateOne({_id: new ObjectId(data.conversationId)},{$set:{modifiedDate: data.timestamp}})
                 console.log("insert response----only res", res)
@@ -64,7 +66,7 @@ const connection = async (server) => {
         socket.on("update_message", async (data) => {
             try {
                 console.log("update_message data:", JSON.stringify(data))
-                await conversationModel.findOneAndUpdate({_id: new ObjectId(data.msg_id)},{$set:{modifiedDate: data.timestamp, mediaURL: data.mediaURL,thumbNail: data.thumbNail, text: data.message, isDelivered: true}})
+                await conversationModel.findOneAndUpdate({_id: new ObjectId(data.msg_id)},{$set:{modifiedDate: data.timestamp, mediaURL: data.mediaURL,thumbNail: data.thumbNail, text: data.message, isDelivered: true, messageDelivered: 1}})
                 let receiver = await userModel.findOne({_id: new ObjectId(data.to),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 let senderRes = await userModel.findOne({_id: new ObjectId(data.from),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 if(receiver && receiver.socketId && receiver.socketId != ""){
