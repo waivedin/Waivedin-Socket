@@ -12,7 +12,7 @@ const MessageSchema = new Schema({
     },
     media_type: {
         type: Number,
-        enum: [ 0, 1, 2, 3, 4, 5],
+        enum: [0, 1, 2, 3, 4, 5],
         default: 0
     },
     text: {
@@ -23,12 +23,20 @@ const MessageSchema = new Schema({
         type: String,
         default: ""
     },
+    thumbNail: {
+        type: String,
+        default: ""
+    },
     createdDate: {
         type: Number
     },
     modifiedDate: {
         type: Number
-    }
+    },
+    isDelivered: {
+        type: Boolean,
+        default: true
+    },
 });
 
 

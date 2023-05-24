@@ -29,23 +29,24 @@ const connection = async (server) => {
         socket.on("send_message", async (data) => {
             try {
                 console.log("send message data:", JSON.stringify(data))
-                data.media_type = data.media_type ? data.media_type : 0
+                data.media_type = data['mediaType'] = data.media_type ? data.media_type : 0
                 let res = await messageModel.create({
                     conversationId : new ObjectId(data.conversationId),
                     createdBy : new ObjectId(data.from),
                     media_type : data.media_type,
                     text : data.message,
                     mediaURL : data.mediaURL?data.mediaURL:"",
+                    thumbNail : data.thumbNail?data.thumbNail:"",
                     createdDate: data.timestamp,
-                    modifiedDate: data.timestamp
+                    modifiedDate: data.timestamp,
+                    isDelivered: data.media_type != 3 ? true : false
                 })
                 await conversationModel.updateOne({_id: new ObjectId(data.conversationId)},{$set:{modifiedDate: data.timestamp}})
                 console.log("insert response----only res", res)
                 console.log("insert response", res._id)
                 let receiver = await userModel.findOne({_id: new ObjectId(data.to),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 let senderRes = await userModel.findOne({_id: new ObjectId(data.from),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
-
-                if(receiver && receiver.socketId && receiver.socketId != ""){
+                if(data.media_type != 3 && receiver && receiver.socketId && receiver.socketId != ""){
                     console.log("Receiver received")
                     console.log("receive_message data:", JSON.stringify({msg_id: res._id,...data}))
                     io.to(receiver.socketId).emit("receive_message",{msg_id: res._id,...data})
@@ -54,6 +55,27 @@ const connection = async (server) => {
                     console.log("Sender received")
                     console.log("Sender received data:", JSON.stringify({msg_id: res._id,...data}))
                     io.to(senderRes.socketId).emit("receive_message",{msg_id: res._id,...data})
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        });
+        
+        socket.on("update_message", async (data) => {
+            try {
+                console.log("update_message data:", JSON.stringify(data))
+                await conversationModel.findOneAndUpdate({_id: new ObjectId(data.msg_id)},{$set:{modifiedDate: data.timestamp, mediaURL: data.mediaURL,thumbNail: data.thumbNail, text: data.message, isDelivered: true}})
+                let receiver = await userModel.findOne({_id: new ObjectId(data.to),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+                let senderRes = await userModel.findOne({_id: new ObjectId(data.from),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+                if(receiver && receiver.socketId && receiver.socketId != ""){
+                    console.log("Receiver received")
+                    console.log("receive_message data:", JSON.stringify({...data}))
+                    io.to(receiver.socketId).emit("receive_message",{...data})
+                }
+                if(senderRes && senderRes.socketId && senderRes.socketId != ""){
+                    console.log("Sender received")
+                    console.log("Sender received data:", JSON.stringify({...data}))
+                    io.to(senderRes.socketId).emit("receive_message",{...data})
                 }
             } catch (e) {
                 console.log(e)
