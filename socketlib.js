@@ -66,7 +66,8 @@ const connection = async (server) => {
         socket.on("update_message", async (data) => {
             try {
                 console.log("update_message data:", JSON.stringify(data))
-                await conversationModel.findOneAndUpdate({_id: new ObjectId(data.msg_id)},{$set:{modifiedDate: data.timestamp, mediaURL: data.mediaURL,thumbNail: data.thumbNail, text: data.message, isDelivered: true, messageDelivered: 1}})
+                data.messageDelivered = 1
+                await conversationModel.findOneAndUpdate({_id: new ObjectId(data.msg_id)},{$set:{modifiedDate: data.timestamp, mediaURL: data.mediaURL,thumbNail: data.thumbNail, text: data.message, isDelivered: true, messageDelivered: data.messageDelivered}})
                 let receiver = await userModel.findOne({_id: new ObjectId(data.to),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 let senderRes = await userModel.findOne({_id: new ObjectId(data.from),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 if(receiver && receiver.socketId && receiver.socketId != ""){
