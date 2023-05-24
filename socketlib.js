@@ -48,7 +48,7 @@ const connection = async (server) => {
                 console.log("insert response", res._id)
                 let receiver = await userModel.findOne({_id: new ObjectId(data.to),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 let senderRes = await userModel.findOne({_id: new ObjectId(data.from),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
-                if(data.media_type != 3 && receiver && receiver.socketId && receiver.socketId != ""){
+                if(data.media_type  >= 1 && receiver && receiver.socketId && receiver.socketId != ""){
                     console.log("Receiver received")
                     console.log("receive_message data:", JSON.stringify({msg_id: res._id,...data}))
                     io.to(receiver.socketId).emit("receive_message",{msg_id: res._id,...data})
