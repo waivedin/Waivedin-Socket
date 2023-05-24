@@ -36,7 +36,7 @@ const connection = async (server) => {
                     createdBy : new ObjectId(data.from),
                     media_type : data.media_type,
                     text : data.message,
-                    mediaURL : data.mediaURL?data.mediaURL:"",
+                    mediaUrl : data.mediaUrl?data.mediaUrl:"",
                     thumbNail : data.thumbNail?data.thumbNail:"",
                     createdDate: data.timestamp,
                     modifiedDate: data.timestamp,
@@ -67,7 +67,7 @@ const connection = async (server) => {
             try {
                 data.messageDelivered = 1
                 console.log("update_message data:", JSON.stringify(data))
-                await messageModel.findOneAndUpdate({_id: new ObjectId(data.msg_id)},{$set:{modifiedDate: data.timestamp, mediaURL: data.mediaURL,thumbNail: data.thumbNail, text: data.message, isDelivered: true, messageDelivered: data.messageDelivered}})
+                await messageModel.findOneAndUpdate({_id: new ObjectId(data.msg_id)},{$set:{modifiedDate: data.timestamp, mediaUrl: data.mediaUrl,thumbNail: data.thumbNail, text: data.message, isDelivered: true, messageDelivered: data.messageDelivered}})
                 let receiver = await userModel.findOne({_id: new ObjectId(data.to),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 let senderRes = await userModel.findOne({_id: new ObjectId(data.from),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 if(receiver && receiver.socketId && receiver.socketId != ""){

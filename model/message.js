@@ -19,7 +19,7 @@ const MessageSchema = new Schema({
         type: String,
         default: ""
     },
-    mediaURL: {
+    mediaUrl: {
         type: String,
         default: ""
     },
