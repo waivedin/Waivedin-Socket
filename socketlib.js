@@ -28,6 +28,7 @@ const connection = async (server) => {
 
         socket.on("send_message", async (data) => {
             try {
+                console.log("send message data:", JSON.stringify(data))
                 let res = await messageModel.create({
                     conversationId : new ObjectId(data.conversationId),
                     createdBy : new ObjectId(data.from),
@@ -42,12 +43,15 @@ const connection = async (server) => {
                 console.log("insert response", res._id)
                 let receiver = await userModel.findOne({_id: new ObjectId(data.to),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 let senderRes = await userModel.findOne({_id: new ObjectId(data.from),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+
                 if(receiver && receiver.socketId && receiver.socketId != ""){
                     console.log("Receiver received")
+                    console.log("receive_message data:", JSON.stringify({msg_id: res._id,...data}))
                     io.to(receiver.socketId).emit("receive_message",{msg_id: res._id,...data})
                 }
                 if(senderRes && senderRes.socketId && senderRes.socketId != ""){
                     console.log("Sender received")
+                    console.log("Sender received data:", JSON.stringify({msg_id: res._id,...data}))
                     io.to(senderRes.socketId).emit("receive_message",{msg_id: res._id,...data})
                 }
             } catch (e) {
