@@ -29,7 +29,7 @@ const connection = async (server) => {
         socket.on("send_message", async (data) => {
             try {
                 console.log("send message data:", JSON.stringify(data))
-                data.media_type = data['mediaType'] = data.media_type ? data.media_type : 0
+                data.media_type = data['mediaType'] = data.media_type ? data.media_type : 1
                 data.messageDelivered = 0
                 let res = await messageModel.create({
                     conversationId : new ObjectId(data.conversationId),

@@ -12,8 +12,8 @@ const MessageSchema = new Schema({
     },
     media_type: {
         type: Number,
-        enum: [0, 1, 2, 3, 4, 5],
-        default: 0
+        enum: [1, 2, 3, 4, 5],
+        default: 1
     },
     text: {
         type: String,
