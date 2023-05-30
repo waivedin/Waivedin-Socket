@@ -99,16 +99,25 @@ const connection = async (server) => {
                 })
                 let postRes = await postModel.findOneAndUpdate({_id: postId}, {$inc:{commentCount: 1}})
                 let receiverRes = await userModel.findOne({_id: postRes.createdBy,socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
-                let senderRes = await userModel.findOne({_id: new ObjectId(data.userId),socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
-                console.log("insert response----only res", res)
-                console.log("insert response", res._id)
+                let senderRes = await userModel.findOne({_id: new ObjectId(data.userId),socketId: {$exists: true},socketId:{$ne: ""}},{displayName: 1,profilepic: 1, gender: 1, socketId: 1})
+                let result = {
+                    msg_id: res._id,
+                    from: data.userId,
+                    message: data.comment,
+                    displayName: senderRes.displayName,
+                    profilePic: senderRes.profilepic,
+                    gender: senderRes.gender == "Male" ? 1 : senderRes.gender == "Female" ? 2 : 0,
+                    timestamp: res.createdDate
+                  }
+                console.log("insert response----only res", result)
+                console.log("insert result", result.msg_id)
                 if(receiverRes && receiverRes.socketId && receiverRes.socketId != ""){
                     console.log("Receiver received")
-                    io.to(receiverRes.socketId).emit("receive_message",{commentId: res._id,...data})
+                    io.to(receiverRes.socketId).emit("receive_message",{...result})
                 }
                 if(senderRes && senderRes.socketId && senderRes.socketId != ""){
                     console.log("Sender received")
-                    io.to(senderRes.socketId).emit("receive_message",{commentId: res._id,...data})
+                    io.to(senderRes.socketId).emit("receive_message",{...result})
                 }
             } catch (e) {
                 console.log(e)
