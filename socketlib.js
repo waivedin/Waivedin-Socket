@@ -117,6 +117,7 @@ const connection = async (server) => {
                     console.log("Receiver received")
                     io.to(receiverRes.socketId).emit("post_receive_message",{...result})
                 }
+                console.log("senderRes",senderRes)
                 if(senderRes && senderRes.socketId && senderRes.socketId != ""){
                     console.log("Sender received")
                     io.to(senderRes.socketId).emit("post_receive_message",{...result})
