@@ -98,7 +98,7 @@ const connection = async (server) => {
                     modifiedDate: commonFunction.getDate()
                 })
                 let postRes = await postModel.findOneAndUpdate({_id: postId}, {$inc:{commentCount: 1}})
-                let receiverRes = await userModel.findOne({_id: postRes.createdBy,socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
+                let receiverRes = await userModel.findOne({_id: postRes.userId,socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 let senderRes = await userModel.findOne({_id: new ObjectId(data.userId),socketId: {$exists: true},socketId:{$ne: ""}},{displayName: 1,profilepic: 1, gender: 1, socketId: 1})
                 let result = {
                     postId,
