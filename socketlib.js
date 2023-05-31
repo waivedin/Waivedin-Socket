@@ -101,6 +101,7 @@ const connection = async (server) => {
                 let receiverRes = await userModel.findOne({_id: postRes.createdBy,socketId: {$exists: true},socketId:{$ne: ""}},{socketId: 1})
                 let senderRes = await userModel.findOne({_id: new ObjectId(data.userId),socketId: {$exists: true},socketId:{$ne: ""}},{displayName: 1,profilepic: 1, gender: 1, socketId: 1})
                 let result = {
+                    postId,
                     msg_id: res._id,
                     from: data.userId,
                     message: data.comment,
@@ -111,6 +112,7 @@ const connection = async (server) => {
                   }
                 console.log("insert response----only res", result)
                 console.log("insert result", result.msg_id)
+                socket.emit("post_receive_message",{...result})
                 if(receiverRes && receiverRes.socketId && receiverRes.socketId != ""){
                     console.log("Receiver received")
                     io.to(receiverRes.socketId).emit("receive_message",{...result})
