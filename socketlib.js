@@ -112,7 +112,7 @@ const connection = async (server) => {
                   }
                 console.log("insert response----only res", result)
                 console.log("insert result", result.msg_id)
-                socket.emit("post_receive_message",{...result})
+                io.sockets.emit("post_receive_message",{...result})
                 if(receiverRes && receiverRes.socketId && receiverRes.socketId != ""){
                     console.log("Receiver received")
                     io.to(receiverRes.socketId).emit("post_receive_message",{...result})
