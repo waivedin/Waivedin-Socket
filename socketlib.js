@@ -115,11 +115,11 @@ const connection = async (server) => {
                 socket.emit("post_receive_message",{...result})
                 if(receiverRes && receiverRes.socketId && receiverRes.socketId != ""){
                     console.log("Receiver received")
-                    io.to(receiverRes.socketId).emit("receive_message",{...result})
+                    io.to(receiverRes.socketId).emit("post_receive_message",{...result})
                 }
                 if(senderRes && senderRes.socketId && senderRes.socketId != ""){
                     console.log("Sender received")
-                    io.to(senderRes.socketId).emit("receive_message",{...result})
+                    io.to(senderRes.socketId).emit("post_receive_message",{...result})
                 }
             } catch (e) {
                 console.log(e)
