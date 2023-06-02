@@ -99,8 +99,16 @@ const connection = async (server) => {
                     io.to(receiver.socketId).emit("receive_message", {
                         ...data
                     })
-                    data['threadId'] = data.conversationId
-                    let temp = {typeOfNotify: "13", ...data, ...senderRes}
+                    let temp = {
+                        allowAnonymous: "false",
+                        profilePic: senderRes.profilepic,
+                        postId: "",
+                        userId: senderRes._id,
+                        title: "",
+                        typeOfnotify: "13",
+                        message: data.message,
+                        threadId: data.conversationId
+                    }
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp , temp).catch((e) => console.log('console.log in socket file-----',e))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
