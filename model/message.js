@@ -42,6 +42,10 @@ const MessageSchema = new Schema({
         default: 0,
         enum: [0, 1]
     },
+    readStatus:{
+        type: Boolean,
+        default: false
+    }
 });
 
 
