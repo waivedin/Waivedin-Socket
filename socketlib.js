@@ -100,9 +100,7 @@ const connection = async (server) => {
                         ...data
                     })
                     data['threadId'] = data.conversationId
-                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", {...data,...senderRes}, {...data, ...senderRes}).catch((e) => reject({
-                        message: e.message
-                    }))
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", {...data,...senderRes}, {...data, ...senderRes}).catch((e) => console.log('console.log in socket file-----',e))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
                     console.log("Sender received")
@@ -177,9 +175,7 @@ const connection = async (server) => {
                         ...data
                     })
                     data['threadId'] = data.conversationId
-                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", {...data,...senderRes}, {...data, ...senderRes}).catch((e) => reject({
-                        message: e.message
-                    }))
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", {...data,...senderRes}, {...data, ...senderRes}).catch((e) => console.log('console.log in socket file-----',e))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
                     console.log("Sender received")

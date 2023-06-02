@@ -26,6 +26,7 @@ exports.sendBasicNotifications = (to, collapse_key, notification, data) => {
             notification,
             data
         }
+        console.log("message------",JSON.stringify(message))
         fcm.send(message, function (err, response) {
             if (err) {
                 console.log("err.....................", err)
