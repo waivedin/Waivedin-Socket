@@ -65,7 +65,13 @@ const connection = async (server) => {
                         $ne: ""
                     }
                 }, {
-                    socketId: 1
+                    socketId: 1,
+                    fname:1,
+                    lname:1,
+                    displayName: 1,
+                    fcmtoken: 1,
+                    gender:1,
+                    profilepic:1
                 })
                 let senderRes = await userModel.findOne({
                     _id: new ObjectId(data.from),
@@ -76,7 +82,13 @@ const connection = async (server) => {
                         $ne: ""
                     }
                 }, {
-                    socketId: 1
+                    socketId: 1,
+                    fname:1,
+                    lname:1,
+                    displayName: 1,
+                    fcmtoken: 1,
+                    gender:1,
+                    profilepic:1
                 })
                 data["msg_id"] = res._id
                 if (data.media_type < 2 && receiver && receiver.socketId && receiver.socketId != "") {
@@ -87,6 +99,10 @@ const connection = async (server) => {
                     io.to(receiver.socketId).emit("receive_message", {
                         ...data
                     })
+                    data['threadId'] = data.conversationId
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", {...data,...senderRes}, {...data, ...senderRes}).catch((e) => reject({
+                        message: e.message
+                    }))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
                     console.log("Sender received")
@@ -97,9 +113,6 @@ const connection = async (server) => {
                         ...data
                     })
                 }
-                await commonFunction.sendBasicNotifications(receiverRes.fcmtoken, "13", {...result,...senderRes}, {...result, ...senderRes}).catch((e) => reject({
-                    message: e.message
-                }))
             } catch (e) {
                 console.log(e)
             }
@@ -130,7 +143,13 @@ const connection = async (server) => {
                         $ne: ""
                     }
                 }, {
-                    socketId: 1
+                    socketId: 1,
+                    fname:1,
+                    lname:1,
+                    displayName: 1,
+                    fcmtoken: 1,
+                    gender:1,
+                    profilepic:1
                 })
                 let senderRes = await userModel.findOne({
                     _id: new ObjectId(data.from),
@@ -141,7 +160,13 @@ const connection = async (server) => {
                         $ne: ""
                     }
                 }, {
-                    socketId: 1
+                    socketId: 1,
+                    fname:1,
+                    lname:1,
+                    displayName: 1,
+                    fcmtoken: 1,
+                    gender:1,
+                    profilepic:1
                 })
                 if (receiver && receiver.socketId && receiver.socketId != "") {
                     console.log("Receiver received")
@@ -151,6 +176,10 @@ const connection = async (server) => {
                     io.to(receiver.socketId).emit("receive_message", {
                         ...data
                     })
+                    data['threadId'] = data.conversationId
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", {...data,...senderRes}, {...data, ...senderRes}).catch((e) => reject({
+                        message: e.message
+                    }))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
                     console.log("Sender received")
@@ -161,10 +190,6 @@ const connection = async (server) => {
                         ...data
                     })
                 }
-                result['threadId'] = data.conversationId
-                await commonFunction.sendBasicNotifications(receiverRes.fcmtoken, "13", {...result,...senderRes}, {...result, ...senderRes}).catch((e) => reject({
-                    message: e.message
-                }))
             } catch (e) {
                 console.log(e)
             }
