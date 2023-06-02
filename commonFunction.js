@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
 const FCM = require('fcm-node');
+console.log("process.env.FCM_SERVER_KEY-------",process.env.FCM_SERVER_KEY)
+console.log("process.env.FCM_SERVER_KEY-------",process.env.FCM_SERVER_KEY)
+console.log("process.env.FCM_SERVER_KEY-------",process.env.FCM_SERVER_KEY)
+console.log("process.env.FCM_SERVER_KEY-------",process.env.FCM_SERVER_KEY)
+console.log("process.env.FCM_SERVER_KEY-------",process.env.FCM_SERVER_KEY)
 const fcm = new FCM(process.env.FCM_SERVER_KEY);
 
 
@@ -23,8 +28,8 @@ exports.sendBasicNotifications = (to, collapse_key, notification, data) => {
           let message = {
             to,
             collapse_key,
-            notification,
-            data
+            notification: {},
+            data: {}
         }
         console.log("message------",JSON.stringify(message))
         fcm.send(message, function (err, response) {
