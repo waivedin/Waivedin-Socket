@@ -28,8 +28,8 @@ exports.sendBasicNotifications = (to, collapse_key, notification, data) => {
           let message = {
             to,
             collapse_key,
-            notification: {},
-            data: {}
+            notification,
+            data
         }
         console.log("message------",JSON.stringify(message))
         fcm.send(message, function (err, response) {
