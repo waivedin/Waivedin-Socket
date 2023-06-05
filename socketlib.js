@@ -100,8 +100,8 @@ const connection = async (server) => {
                         ...data
                     })
                     let temp = {
-                        allowAnonymous: "false",
-                        profilePic: senderRes.profilepic,
+                        allowAnonymous: false,
+                        profilePic: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
                         postId: "",
                         userId: senderRes._id,
                         title: "",
