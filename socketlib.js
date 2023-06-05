@@ -12,12 +12,9 @@ const {
 
 const connection = async (server) => {
     io.sockets.on("connection", (socket) => {
-        console.log("Socket connected-----socketId-----", socket.id)
         socket.emit("connect_server", {})
         socket.on("client_server", async (data) => {
             try {
-                console.log("client_connect emitted:", JSON.stringify(data))
-                console.log("socket.id emitted:", socket)
                 console.log("socket.id emitted:", socket.id)
                 await userModel.updateOne({
                     _id: new ObjectId(data.user_id)
@@ -25,7 +22,7 @@ const connection = async (server) => {
                     $set: {
                         socketId: socket.id
                     }
-                }).catch(e => console.log("query", e))
+                }).catch(e => console.log("client server", JSON.stringify(e)))
             } catch (e) {
                 console.log(e)
             }
@@ -54,8 +51,7 @@ const connection = async (server) => {
                         modifiedDate: data.timestamp
                     }
                 })
-                console.log("insert response----only res", res)
-                console.log("insert response", res._id)
+                console.log("send_message:------", JSON.stringify(res))
                 let receiver = await userModel.findOne({
                     _id: new ObjectId(data.to),
                     socketId: {
@@ -91,34 +87,39 @@ const connection = async (server) => {
                     profilepic:1
                 })
                 data["msg_id"] = res._id
+                let temp = {
+                    allowAnonymous: false,
+                    profilePic: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
+                    postId: "",
+                    userId: senderRes._id,
+                    title: "",
+                    typeOfnotify: "13",
+                    message: data.message,
+                    threadId: data.conversationId
+                }
                 if (data.media_type < 2 && receiver && receiver.socketId && receiver.socketId != "") {
-                    console.log("Receiver received")
-                    console.log("receive_message data:", JSON.stringify({
+                    console.log("send_message: socket------receiver side:------sent successfully", JSON.stringify({
                         ...data
                     }))
                     io.to(receiver.socketId).emit("receive_message", {
                         ...data
                     })
-                    let temp = {
-                        allowAnonymous: false,
-                        profilePic: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
-                        postId: "",
-                        userId: senderRes._id,
-                        title: "",
-                        typeOfnotify: "13",
-                        message: data.message,
-                        threadId: data.conversationId
-                    }
+                }
+                if(data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == ""){
+                    console.log("send_message: push notification------receiver side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp , temp).catch((e) => console.log('console.log in socket file-----',e))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
-                    console.log("Sender received")
-                    console.log("Sender received data:", JSON.stringify({
+                    console.log("send_message: socket------sender side:------sent successfully", JSON.stringify({
                         ...data
                     }))
                     io.to(senderRes.socketId).emit("receive_message", {
                         ...data
                     })
+                }
+                if(senderRes && senderRes.socketId && senderRes.socketId == ""){
+                    console.log("send_message: push notification------sender side:------sent to send basic notification")
+                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", temp , temp).catch((e) => console.log('console.log in socket file-----',e))
                 }
             } catch (e) {
                 console.log(e)
@@ -128,7 +129,6 @@ const connection = async (server) => {
         socket.on("update_message", async (data) => {
             try {
                 data.messageDelivered = 1
-                console.log("update_message data:", JSON.stringify(data))
                 await messageModel.findOneAndUpdate({
                     _id: new ObjectId(data.msg_id)
                 }, {
@@ -175,25 +175,39 @@ const connection = async (server) => {
                     gender:1,
                     profilepic:1
                 })
+                let temp = {
+                    allowAnonymous: false,
+                    profilePic: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
+                    postId: "",
+                    userId: senderRes._id,
+                    title: "",
+                    typeOfnotify: "13",
+                    message: data.message,
+                    threadId: data.conversationId
+                }
                 if (receiver && receiver.socketId && receiver.socketId != "") {
-                    console.log("Receiver received")
-                    console.log("receive_message data:", JSON.stringify({
+                    console.log("update_message: socket------receiver side:------sent successfully", JSON.stringify({
                         ...data
                     }))
                     io.to(receiver.socketId).emit("receive_message", {
                         ...data
                     })
-                    data['threadId'] = data.conversationId
-                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", {...data,...senderRes}, {...data, ...senderRes}).catch((e) => console.log('console.log in socket file-----',e))
+                }
+                if(receiver && receiver.socketId && receiver.socketId == ""){
+                    console.log("update_message: push notification------receiver side:------sent to send basic notification")
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp , temp).catch((e) => console.log('Error push notification for receiver-----',JSON.stringify(e)))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
-                    console.log("Sender received")
-                    console.log("Sender received data:", JSON.stringify({
+                    console.log("update_message: socket------sender side:------sent successfully", JSON.stringify({
                         ...data
                     }))
                     io.to(senderRes.socketId).emit("receive_message", {
                         ...data
                     })
+                }
+                if(senderRes && senderRes.socketId && senderRes.socketId == ""){
+                    console.log("update_message: push notification------sender side:------sent to send basic notification")
+                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", temp , temp).catch((e) => console.log('Error push notification for sender-----',JSON.stringify(e)))
                 }
             } catch (e) {
                 console.log(e)
@@ -257,8 +271,6 @@ const connection = async (server) => {
                     gender: senderRes.gender == "Male" ? 1 : senderRes.gender == "Female" ? 2 : 0,
                     timestamp: res.createdDate
                 }
-                console.log("insert response----only res", result)
-                console.log("insert result", result.msg_id)
                 io.sockets.emit("post_receive_message", {
                     ...result
                 })
@@ -295,7 +307,7 @@ const connection = async (server) => {
 
         socket.on("disconnect", async (data) => {
             try {
-                console.log("Socket disconnected", socket)
+                console.log("Socket disconnected", socket.id)
             } catch (e) {
                 console.log(e)
             }
