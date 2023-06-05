@@ -19,32 +19,32 @@ exports.getDate = () => {
 
 exports.sendBasicNotifications = (to, collapse_key, notification, data) => {
   return new Promise((resolve, reject) => {
-      try {
-          let message = {
-            to,
-            collapse_key,
-            notification,
-            data
-        }
-        console.log("Push notification message:-------",JSON.stringify(message))
-        fcm.send(message, function (err, response) {
-            if (err) {
-                console.log("Push notification error message:-------", JSON.stringify(err))
-                reject({
-                    'message': err
-                })
-            } else {
-              console.log("Push notification sent successfully:-------", JSON.stringify(response))
-                resolve({
-                    'data': response
-                })
-            }
-        });
-} catch (e) {
-          console.log("e.........................",e)
-          reject({
-              message: e.message
-          })
+    try {
+      let message = {
+        to,
+        collapse_key,
+        notification,
+        data
       }
+      console.log("Push notification message:-------", JSON.stringify(message))
+      fcm.send(message, function (err, response) {
+        if (err) {
+          console.log("Push notification error message:-------", JSON.stringify(err))
+          reject({
+            'message': err
+          })
+        } else {
+          console.log("Push notification sent successfully:-------", JSON.stringify(response))
+          resolve({
+            'data': response
+          })
+        }
+      });
+    } catch (e) {
+      console.log("Push notification error message:",JSON.stringify(e))
+      reject({
+        message: e.message
+      })
+    }
   })
 }
