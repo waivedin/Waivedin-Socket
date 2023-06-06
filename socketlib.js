@@ -53,38 +53,26 @@ const connection = async (server) => {
                 })
                 console.log("send_message:------", JSON.stringify(res))
                 let receiver = await userModel.findOne({
-                    _id: new ObjectId(data.to),
-                    socketId: {
-                        $exists: true
-                    },
-                    socketId: {
-                        $ne: ""
-                    }
+                    _id: new ObjectId(data.to)
                 }, {
                     socketId: 1,
-                    fname:1,
-                    lname:1,
+                    fname: 1,
+                    lname: 1,
                     displayName: 1,
                     fcmtoken: 1,
-                    gender:1,
-                    profilepic:1
+                    gender: 1,
+                    profilepic: 1
                 })
                 let senderRes = await userModel.findOne({
-                    _id: new ObjectId(data.from),
-                    socketId: {
-                        $exists: true
-                    },
-                    socketId: {
-                        $ne: ""
-                    }
+                    _id: new ObjectId(data.from)
                 }, {
                     socketId: 1,
-                    fname:1,
-                    lname:1,
+                    fname: 1,
+                    lname: 1,
                     displayName: 1,
                     fcmtoken: 1,
-                    gender:1,
-                    profilepic:1
+                    gender: 1,
+                    profilepic: 1
                 })
                 data["msg_id"] = res._id
                 let temp = {
@@ -105,11 +93,11 @@ const connection = async (server) => {
                         ...data
                     })
                 }
-                console.log("receiver:-----",JSON.stringify(receiver))
-                console.log("data:-----",JSON.stringify(data))
-                if(data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == ""){
+                console.log("receiver:-----", JSON.stringify(receiver))
+                console.log("data:-----", JSON.stringify(data))
+                if (data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == "") {
                     console.log("send_message: push notification------receiver side:------sent to send basic notification")
-                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp , temp).catch((e) => console.log('console.log in socket file-----',e))
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
                     console.log("send_message: socket------sender side:------sent successfully", JSON.stringify({
@@ -119,9 +107,9 @@ const connection = async (server) => {
                         ...data
                     })
                 }
-                if(senderRes && senderRes.socketId && senderRes.socketId == ""){
+                if (senderRes && senderRes.socketId && senderRes.socketId == "") {
                     console.log("send_message: push notification------sender side:------sent to send basic notification")
-                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", temp , temp).catch((e) => console.log('console.log in socket file-----',e))
+                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
                 }
             } catch (e) {
                 console.log(e)
@@ -144,38 +132,26 @@ const connection = async (server) => {
                     }
                 })
                 let receiver = await userModel.findOne({
-                    _id: new ObjectId(data.to),
-                    socketId: {
-                        $exists: true
-                    },
-                    socketId: {
-                        $ne: ""
-                    }
+                    _id: new ObjectId(data.to)
                 }, {
                     socketId: 1,
-                    fname:1,
-                    lname:1,
+                    fname: 1,
+                    lname: 1,
                     displayName: 1,
                     fcmtoken: 1,
-                    gender:1,
-                    profilepic:1
+                    gender: 1,
+                    profilepic: 1
                 })
                 let senderRes = await userModel.findOne({
-                    _id: new ObjectId(data.from),
-                    socketId: {
-                        $exists: true
-                    },
-                    socketId: {
-                        $ne: ""
-                    }
+                    _id: new ObjectId(data.from)
                 }, {
                     socketId: 1,
-                    fname:1,
-                    lname:1,
+                    fname: 1,
+                    lname: 1,
                     displayName: 1,
                     fcmtoken: 1,
-                    gender:1,
-                    profilepic:1
+                    gender: 1,
+                    profilepic: 1
                 })
                 let temp = {
                     allowAnonymous: false,
@@ -195,9 +171,9 @@ const connection = async (server) => {
                         ...data
                     })
                 }
-                if(receiver && receiver.socketId && receiver.socketId == ""){
+                if (receiver && receiver.socketId && receiver.socketId == "") {
                     console.log("update_message: push notification------receiver side:------sent to send basic notification")
-                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp , temp).catch((e) => console.log('Error push notification for receiver-----',JSON.stringify(e)))
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('Error push notification for receiver-----', JSON.stringify(e)))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
                     console.log("update_message: socket------sender side:------sent successfully", JSON.stringify({
@@ -207,9 +183,9 @@ const connection = async (server) => {
                         ...data
                     })
                 }
-                if(senderRes && senderRes.socketId && senderRes.socketId == ""){
+                if (senderRes && senderRes.socketId && senderRes.socketId == "") {
                     console.log("update_message: push notification------sender side:------sent to send basic notification")
-                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", temp , temp).catch((e) => console.log('Error push notification for sender-----',JSON.stringify(e)))
+                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", temp, temp).catch((e) => console.log('Error push notification for sender-----', JSON.stringify(e)))
                 }
             } catch (e) {
                 console.log(e)
