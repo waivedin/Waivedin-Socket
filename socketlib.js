@@ -86,7 +86,9 @@ const connection = async (server) => {
                     threadId: data.conversationId,
                     mediaUrl: data.mediaUrl,
                     media_type: data.media_type,
-                    body: data.message
+                    body: data.message,
+                    sound: "notification_sound",
+                    image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`
                 }
                 if (data.media_type < 2 && receiver && receiver.socketId && receiver.socketId != "") {
                     console.log("send_message: socket------receiver side:------sent successfully", JSON.stringify({
@@ -176,6 +178,8 @@ const connection = async (server) => {
                     mediaUrl: data.mediaUrl,
                     media_type: data.media_type,
                     body: data.message,
+                    sound: "notification_sound",
+                    image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
                 }
                 console.log("receiver:-----", JSON.stringify(receiver))
                 console.log("data:-----", JSON.stringify(data))
