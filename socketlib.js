@@ -95,6 +95,11 @@ const connection = async (server) => {
                 }
                 console.log("receiver:-----", JSON.stringify(receiver))
                 console.log("data:-----", JSON.stringify(data))
+                console.log("data.media_type < 2",data.media_type < 2)
+                console.log("receiver:----",receiver)
+                console.log("receiver.socketId",receiver.socketId)
+                console.log(`receiver.socketId=="":-----${receiver.socketId==""}`)
+                console.log("receiver condition:-----",(data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == ""))
                 if (data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == "") {
                     console.log("send_message: push notification------receiver side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
@@ -111,6 +116,9 @@ const connection = async (server) => {
                     console.log("send_message: push notification------sender side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
                 }
+                console.log("")
+                console.log("")
+                console.log("")
             } catch (e) {
                 console.log(e)
             }
@@ -163,6 +171,13 @@ const connection = async (server) => {
                     message: data.message,
                     threadId: data.conversationId
                 }
+                console.log("receiver:-----", JSON.stringify(receiver))
+                console.log("data:-----", JSON.stringify(data))
+                console.log("data.media_type < 2",data.media_type < 2)
+                console.log("receiver:----",receiver)
+                console.log("receiver.socketId",receiver.socketId)
+                console.log(`receiver.socketId=="":-----${receiver.socketId==""}`)
+                console.log("receiver condition:-----",(data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == ""))
                 if (receiver && receiver.socketId && receiver.socketId != "") {
                     console.log("update_message: socket------receiver side:------sent successfully", JSON.stringify({
                         ...data
@@ -265,6 +280,9 @@ const connection = async (server) => {
                         ...result
                     })
                 }
+                console.log("")
+                console.log("")
+                console.log("")
             } catch (e) {
                 console.log(e)
             }
