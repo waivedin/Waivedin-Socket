@@ -168,7 +168,7 @@ const connection = async (server) => {
                     profilePic: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
                     postId: "",
                     userId: senderRes._id,
-                    title: "",
+                    title: senderRes.displayName,
                     typeOfnotify: "13",
                     message: data.message,
                     threadId: data.conversationId,
