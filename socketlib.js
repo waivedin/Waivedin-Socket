@@ -85,7 +85,8 @@ const connection = async (server) => {
                     message: data.message,
                     threadId: data.conversationId,
                     mediaUrl: data.mediaUrl,
-                    media_type: data.media_type 
+                    media_type: data.media_type,
+                    body: data.message
                 }
                 if (data.media_type < 2 && receiver && receiver.socketId && receiver.socketId != "") {
                     console.log("send_message: socket------receiver side:------sent successfully", JSON.stringify({
@@ -173,7 +174,8 @@ const connection = async (server) => {
                     message: data.message,
                     threadId: data.conversationId,
                     mediaUrl: data.mediaUrl,
-                    media_type: data.media_type 
+                    media_type: data.media_type,
+                    body: data.message,
                 }
                 console.log("receiver:-----", JSON.stringify(receiver))
                 console.log("data:-----", JSON.stringify(data))
