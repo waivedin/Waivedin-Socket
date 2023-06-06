@@ -105,6 +105,8 @@ const connection = async (server) => {
                         ...data
                     })
                 }
+                console.log("receiver:-----",JSON.stringify(receiver))
+                console.log("data:-----",JSON.stringify(data))
                 if(data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == ""){
                     console.log("send_message: push notification------receiver side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp , temp).catch((e) => console.log('console.log in socket file-----',e))
