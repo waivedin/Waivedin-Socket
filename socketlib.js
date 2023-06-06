@@ -99,7 +99,7 @@ const connection = async (server) => {
                 console.log("receiver:----",receiver)
                 console.log("receiver.socketId",receiver.socketId)
                 console.log(`receiver.socketId=="":-----${receiver.socketId==""}`)
-                console.log("receiver condition:-----",(data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == ""))
+                console.log("receiver condition:-----",(data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == "")? true : false)
                 if (data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == "") {
                     console.log("send_message: push notification------receiver side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
@@ -177,7 +177,7 @@ const connection = async (server) => {
                 console.log("receiver:----",receiver)
                 console.log("receiver.socketId",receiver.socketId)
                 console.log(`receiver.socketId=="":-----${receiver.socketId==""}`)
-                console.log("receiver condition:-----",(data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == ""))
+                console.log("receiver condition:-----",(data.media_type < 2 && receiver && receiver.socketId && receiver.socketId == "")? true : false)
                 if (receiver && receiver.socketId && receiver.socketId != "") {
                     console.log("update_message: socket------receiver side:------sent successfully", JSON.stringify({
                         ...data
