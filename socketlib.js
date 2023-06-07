@@ -77,7 +77,7 @@ const connection = async (server) => {
                 data["msg_id"] = res._id
                 let temp = {
                     allowAnonymous: false,
-                    profilePic: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
+                    profilePic: `${senderRes.profilepic}`,
                     postId: "",
                     userId: senderRes._id,
                     title: senderRes.displayName,
@@ -87,6 +87,8 @@ const connection = async (server) => {
                     mediaUrl: data.mediaUrl,
                     media_type: data.media_type,
                     body: data.message,
+                    gender: senderRes.gender,
+                    thumbNail: data.thumbNail ? data.thumbNail : "",
                     sound: "notification_sound",
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`
                 }
@@ -168,7 +170,7 @@ const connection = async (server) => {
                 })
                 let temp = {
                     allowAnonymous: false,
-                    profilePic: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
+                    profilePic: `${senderRes.profilepic}`,
                     postId: "",
                     userId: senderRes._id,
                     title: senderRes.displayName,
@@ -178,6 +180,8 @@ const connection = async (server) => {
                     mediaUrl: data.mediaUrl,
                     media_type: data.media_type,
                     body: data.message,
+                    gender: senderRes.gender,
+                    thumbNail: data.thumbNail ? data.thumbNail : "",
                     sound: "notification_sound",
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
                 }
