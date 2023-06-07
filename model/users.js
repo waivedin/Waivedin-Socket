@@ -173,6 +173,9 @@ const UserDetailSchema = new Schema({
     },
     socketId: {
         type: String
+    },
+    currentChatUser:{
+        type: String
     }
 });
 
