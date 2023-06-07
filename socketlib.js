@@ -103,13 +103,6 @@ const connection = async (server) => {
                         ...data
                     })
                 }
-                console.log("receiver:-----", JSON.stringify(receiver))
-                console.log("data:-----", JSON.stringify(data))
-                console.log("data.media_type < 2",data.media_type < 2)
-                console.log("receiver:----",receiver)
-                console.log("receiver.socketId",receiver.socketId)
-                console.log(`receiver.socketId=="":-----${receiver.socketId==""}`)
-                console.log("receiver condition:-----",(data.media_type < 2  && receiver.socketId == "")? true : false)
                 if (data.media_type < 2 && receiver.currentChatUser != data.from) {
                     console.log("send_message: push notification------receiver side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
@@ -126,8 +119,6 @@ const connection = async (server) => {
                     console.log("send_message: push notification------sender side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
                 }
-                console.log("")
-                console.log("")
                 console.log("")
             } catch (e) {
                 console.log(e)
@@ -188,13 +179,6 @@ const connection = async (server) => {
                     sound: "notification_sound",
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
                 }
-                console.log("receiver:-----", JSON.stringify(receiver))
-                console.log("data:-----", JSON.stringify(data))
-                console.log("data.media_type < 2",data.media_type < 2)
-                console.log("receiver:----",receiver)
-                console.log("receiver.socketId",receiver.socketId)
-                console.log(`receiver.socketId=="":-----${receiver.socketId==""}`)
-                console.log("receiver condition:-----",(receiver.socketId == "")? true : false)
                 if (receiver && receiver.socketId && receiver.socketId != "") {
                     console.log("update_message: socket------receiver side:------sent successfully", JSON.stringify({
                         ...data
