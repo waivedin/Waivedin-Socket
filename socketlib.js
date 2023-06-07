@@ -64,7 +64,8 @@ const connection = async (server) => {
                     displayName: 1,
                     fcmtoken: 1,
                     gender: 1,
-                    profilepic: 1
+                    profilepic: 1,
+                    currentChatUser: 1
                 })
                 let senderRes = await userModel.findOne({
                     _id: new ObjectId(data.from)
@@ -75,7 +76,8 @@ const connection = async (server) => {
                     displayName: 1,
                     fcmtoken: 1,
                     gender: 1,
-                    profilepic: 1
+                    profilepic: 1,
+                    currentChatUser: 1
                 })
                 data["msg_id"] = res._id
                 let temp = {
@@ -155,7 +157,8 @@ const connection = async (server) => {
                     displayName: 1,
                     fcmtoken: 1,
                     gender: 1,
-                    profilepic: 1
+                    profilepic: 1,
+                    currentChatUser: 1
                 })
                 let senderRes = await userModel.findOne({
                     _id: new ObjectId(data.from)
@@ -166,7 +169,8 @@ const connection = async (server) => {
                     displayName: 1,
                     fcmtoken: 1,
                     gender: 1,
-                    profilepic: 1
+                    profilepic: 1,
+                    currentChatUser: 1
                 })
                 let temp = {
                     allowAnonymous: false,
