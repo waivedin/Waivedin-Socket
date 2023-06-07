@@ -104,7 +104,9 @@ const connection = async (server) => {
                     })
                 }
                 console.log("receiver.currentChatUser",receiver.currentChatUser)
+                console.log("receiver.currentChatUser---type",typeof(receiver.currentChatUser))
                 console.log("data.from",data.from)
+                console.log("data.from-----type",typeof(data.from))
                 console.log("receiver.currentChatUser != data.from",receiver.currentChatUser != data.from ? true : false)
                 console.log("data.media_type < 2 && receiver.currentChatUser != data.from",data.media_type < 2 && receiver.currentChatUser != data.from ? true: false)
                 if (data.media_type < 2 && receiver.currentChatUser != data.from) {
