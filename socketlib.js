@@ -5,6 +5,7 @@ const conversationModel = require('./model/conversation');
 const commentModel = require('./model/comment');
 const postModel = require('./model/post');
 const commonFunction = require('./commonFunction');
+const UserDetail = require('./model/users');
 const {
     ObjectId
 } = require('mongoose').Types
@@ -13,6 +14,7 @@ const {
 const connection = async (server) => {
     io.sockets.on("connection", (socket) => {
         socket.emit("connect_server", {})
+        
         socket.on("client_server", async (data) => {
             try {
                 console.log("socket.id emitted:", socket.id)
@@ -27,6 +29,7 @@ const connection = async (server) => {
                 console.log(e)
             }
         });
+
         socket.on("send_message", async (data) => {
             try {
                 console.log("send message data:", JSON.stringify(data))
@@ -107,7 +110,7 @@ const connection = async (server) => {
                 console.log("receiver.socketId",receiver.socketId)
                 console.log(`receiver.socketId=="":-----${receiver.socketId==""}`)
                 console.log("receiver condition:-----",(data.media_type < 2  && receiver.socketId == "")? true : false)
-                if (data.media_type < 2 && receiver.socketId == "") {
+                if (data.media_type < 2 && receiver.socketId == "" && receiver.currentChatUser != data.from) {
                     console.log("send_message: push notification------receiver side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
                 }
@@ -179,7 +182,7 @@ const connection = async (server) => {
                     threadId: data.conversationId,
                     mediaUrl: data.mediaUrl,
                     media_type: data.media_type,
-                    body: data.message,
+                    body: data.media_type == 1 ? data.message : data.media_type == 2 ? `📷` : data.media_type == 3 ? `🎥` : `🎧`  ,
                     gender: senderRes.gender,
                     thumbNail: data.thumbNail ? data.thumbNail : "",
                     sound: "notification_sound",
@@ -192,7 +195,7 @@ const connection = async (server) => {
                 console.log("receiver.socketId",receiver.socketId)
                 console.log(`receiver.socketId=="":-----${receiver.socketId==""}`)
                 console.log("receiver condition:-----",(receiver.socketId == "")? true : false)
-                if (receiver && receiver.socketId && receiver.socketId != "") {
+                if (receiver && receiver.socketId && receiver.socketId != "" && receiver.currentChatUser != data.from) {
                     console.log("update_message: socket------receiver side:------sent successfully", JSON.stringify({
                         ...data
                     }))
@@ -297,6 +300,14 @@ const connection = async (server) => {
                 console.log("")
                 console.log("")
                 console.log("")
+            } catch (e) {
+                console.log(e)
+            }
+        });
+
+        socket.on("updateCurrentChatUser", async (data) => {
+            try {
+                await UserDetail.updateOne({_id: ObjectId(data.userId)},{$set:{currentChatUser: data.status ? data.receiverId : ""}})
             } catch (e) {
                 console.log(e)
             }
