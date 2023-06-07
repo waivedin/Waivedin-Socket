@@ -321,7 +321,8 @@ const connection = async (server) => {
                 _id: new ObjectId(data.user_id)
             }, {
                 $set: {
-                    socketId: ""
+                    socketId: "",
+                    currentChatUser: ""
                 }
             }).catch(e => console.log("query", e))
         })
@@ -329,6 +330,14 @@ const connection = async (server) => {
         socket.on("disconnect", async (data) => {
             try {
                 console.log("Socket disconnected", socket.id)
+                await userModel.updateOne({
+                    socketId: socket.id
+                }, {
+                    $set: {
+                        socketId: "",
+                        currentChatUser: ""
+                    }
+                }).catch(e => console.log("query", e))    
             } catch (e) {
                 console.log(e)
             }
