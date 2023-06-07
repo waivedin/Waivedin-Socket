@@ -307,7 +307,7 @@ const connection = async (server) => {
 
         socket.on("updateCurrentChatUser", async (data) => {
             try {
-                await UserDetail.updateOne({_id: ObjectId(data.userId)},{$set:{currentChatUser: data.status ? data.receiverId : ""}})
+                await UserDetail.updateOne({_id: new ObjectId(data.userId)},{$set:{currentChatUser: data.status ? data.receiverId : ""}})
             } catch (e) {
                 console.log(e)
             }
