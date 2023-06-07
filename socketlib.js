@@ -110,7 +110,7 @@ const connection = async (server) => {
                 console.log("receiver.socketId",receiver.socketId)
                 console.log(`receiver.socketId=="":-----${receiver.socketId==""}`)
                 console.log("receiver condition:-----",(data.media_type < 2  && receiver.socketId == "")? true : false)
-                if (data.media_type < 2 && receiver.socketId == "" && receiver.currentChatUser != data.from) {
+                if (data.media_type < 2 && receiver.currentChatUser != data.from) {
                     console.log("send_message: push notification------receiver side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
                 }
@@ -195,7 +195,7 @@ const connection = async (server) => {
                 console.log("receiver.socketId",receiver.socketId)
                 console.log(`receiver.socketId=="":-----${receiver.socketId==""}`)
                 console.log("receiver condition:-----",(receiver.socketId == "")? true : false)
-                if (receiver && receiver.socketId && receiver.socketId != "" && receiver.currentChatUser != data.from) {
+                if (receiver && receiver.socketId && receiver.socketId != "") {
                     console.log("update_message: socket------receiver side:------sent successfully", JSON.stringify({
                         ...data
                     }))
@@ -203,7 +203,7 @@ const connection = async (server) => {
                         ...data
                     })
                 }
-                if (receiver.socketId == "") {
+                if (receiver.currentChatUser != data.from) {
                     console.log("update_message: push notification------receiver side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('Error push notification for receiver-----', JSON.stringify(e)))
                 }
@@ -307,16 +307,9 @@ const connection = async (server) => {
 
         socket.on("updateCurrentChatUser", async (data) => {
             try {
-                console.log("")
                 console.log("updateCurrentChatUser", JSON.stringify(data))
-                console.log("")
-                console.log("status",data.status)
                 let currentChatUser = data.status == true ? data.receiverId : ""
-                console.log("currentChatUser",currentChatUser)
                 let res = await userModel.updateOne({_id: new ObjectId(data.userId)},{$set:{currentChatUser}})
-                console.log("")
-                console.log("updateCurrentChatUser update Status", JSON.stringify(res))
-                console.log("")
             } catch (e) {
                 console.log(e)
             }
