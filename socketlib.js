@@ -89,7 +89,7 @@ const connection = async (server) => {
                     threadId: data.conversationId,
                     mediaUrl: data.mediaUrl,
                     media_type: data.media_type,
-                    body: data.message,
+                    body: data.media_type == 1 ? data.message : data.media_type == 2 ? `📷` : data.media_type == 3 ? `🎥` : `🎧`  ,
                     gender: senderRes.gender,
                     thumbNail: data.thumbNail ? data.thumbNail : "",
                     sound: "notification_sound",
