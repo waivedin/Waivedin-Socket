@@ -103,6 +103,10 @@ const connection = async (server) => {
                         ...data
                     })
                 }
+                console.log("receiver.currentChatUser",receiver.currentChatUser)
+                console.log("data.from",data.from)
+                console.log("receiver.currentChatUser != data.from",receiver.currentChatUser != data.from ? true : false)
+                console.log("data.media_type < 2 && receiver.currentChatUser != data.from",data.media_type < 2 && receiver.currentChatUser != data.from ? true: false)
                 if (data.media_type < 2 && receiver.currentChatUser != data.from) {
                     console.log("send_message: push notification------receiver side:------sent to send basic notification")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
