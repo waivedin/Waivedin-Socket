@@ -310,7 +310,8 @@ const connection = async (server) => {
                 console.log("")
                 console.log("updateCurrentChatUser", JSON.stringify(data))
                 console.log("")
-                let res = await UserDetail.updateOne({_id: new ObjectId(data.userId)},{$set:{currentChatUser: data.status ? data.receiverId : ""}})
+                let currentChatUser = data.status ? data.receiverId : ""
+                let res = await UserDetail.updateOne({_id: new ObjectId(data.userId)},{$set:{currentChatUser}})
                 console.log("")
                 console.log("updateCurrentChatUser update Status", JSON.stringify(res))
                 console.log("")
