@@ -312,7 +312,7 @@ const connection = async (server) => {
                 console.log("")
                 let currentChatUser = data.status ? data.receiverId : ""
                 console.log("currentChatUser",currentChatUser)
-                let res = await UserDetail.updateOne({_id: new ObjectId(data.userId)},{$set:{currentChatUser}})
+                let res = await userModel.updateOne({_id: new ObjectId(data.userId)},{$set:{currentChatUser}})
                 console.log("")
                 console.log("updateCurrentChatUser update Status", JSON.stringify(res))
                 console.log("")
