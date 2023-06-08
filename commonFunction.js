@@ -23,7 +23,7 @@ exports.sendBasicNotifications = (to, collapse_key, notification, data) => {
       let message = {
         to,
         collapse_key,
-        notification: {},
+        notification,
         data
       }
       console.log("Push notification message:-------", JSON.stringify(message))

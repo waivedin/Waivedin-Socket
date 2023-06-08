@@ -54,7 +54,6 @@ const connection = async (server) => {
                         modifiedDate: data.timestamp
                     }
                 })
-                console.log("send_message:------", JSON.stringify(res))
                 let receiver = await userModel.findOne({
                     _id: new ObjectId(data.to)
                 }, {
@@ -65,7 +64,8 @@ const connection = async (server) => {
                     fcmtoken: 1,
                     gender: 1,
                     profilepic: 1,
-                    currentChatUser: 1
+                    currentChatUser: 1,
+                    devicetype: 1
                 })
                 let senderRes = await userModel.findOne({
                     _id: new ObjectId(data.from)
@@ -77,7 +77,8 @@ const connection = async (server) => {
                     fcmtoken: 1,
                     gender: 1,
                     profilepic: 1,
-                    currentChatUser: 1
+                    currentChatUser: 1,
+                    devicetype: 1
                 })
                 data["msg_id"] = res._id
                 let temp = {
@@ -98,36 +99,21 @@ const connection = async (server) => {
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`
                 }
                 if (data.media_type < 2 && receiver && receiver.socketId && receiver.socketId != "") {
-                    console.log("send_message: socket------receiver side:------sent successfully", JSON.stringify({
-                        ...data
-                    }))
                     io.to(receiver.socketId).emit("receive_message", {
                         ...data
                     })
                 }
-                console.log("receiver.currentChatUser",receiver.currentChatUser)
-                console.log("receiver.currentChatUser---type",typeof(receiver.currentChatUser))
-                console.log("data.from",data.from)
-                console.log("data.from-----type",typeof(data.from))
-                console.log("receiver.currentChatUser != data.from",receiver.currentChatUser != data.from ? true : false)
-                console.log("data.media_type < 2 && receiver.currentChatUser != data.from",data.media_type < 2 && receiver.currentChatUser != data.from ? true: false)
                 if (data.media_type < 2 && receiver.currentChatUser != data.from) {
-                    console.log("send_message: push notification------receiver side:------sent to send basic notification")
-                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", receiver.devicetype == 0 ? {} : temp, receiver.devicetype == 0 ? temp : {}).catch((e) => console.log('console.log in socket file-----', e))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
-                    console.log("send_message: socket------sender side:------sent successfully", JSON.stringify({
-                        ...data
-                    }))
                     io.to(senderRes.socketId).emit("receive_message", {
                         ...data
                     })
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId == "") {
-                    console.log("send_message: push notification------sender side:------sent to send basic notification")
-                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", temp, temp).catch((e) => console.log('console.log in socket file-----', e))
+                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", senderRes.devicetype == 0 ? {} : temp, senderRes.devicetype == 0 ? temp : {}).catch((e) => console.log('console.log in socket file-----', e))
                 }
-                console.log("")
             } catch (e) {
                 console.log(e)
             }
@@ -158,7 +144,8 @@ const connection = async (server) => {
                     fcmtoken: 1,
                     gender: 1,
                     profilepic: 1,
-                    currentChatUser: 1
+                    currentChatUser: 1,
+                    devicetype: 1
                 })
                 let senderRes = await userModel.findOne({
                     _id: new ObjectId(data.from)
@@ -170,7 +157,8 @@ const connection = async (server) => {
                     fcmtoken: 1,
                     gender: 1,
                     profilepic: 1,
-                    currentChatUser: 1
+                    currentChatUser: 1,
+                    devicetype: 1
                 })
                 let temp = {
                     allowAnonymous: false,
@@ -190,28 +178,20 @@ const connection = async (server) => {
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
                 }
                 if (receiver && receiver.socketId && receiver.socketId != "") {
-                    console.log("update_message: socket------receiver side:------sent successfully", JSON.stringify({
-                        ...data
-                    }))
                     io.to(receiver.socketId).emit("receive_message", {
                         ...data
                     })
                 }
                 if (receiver.currentChatUser != data.from) {
-                    console.log("update_message: push notification------receiver side:------sent to send basic notification")
-                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", temp, temp).catch((e) => console.log('Error push notification for receiver-----', JSON.stringify(e)))
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", receiver.devicetype == 0 ? {} : temp, receiver.devicetype == 0 ? temp : {}).catch((e) => console.log('Error push notification for receiver-----', JSON.stringify(e)))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
-                    console.log("update_message: socket------sender side:------sent successfully", JSON.stringify({
-                        ...data
-                    }))
                     io.to(senderRes.socketId).emit("receive_message", {
                         ...data
                     })
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId == "") {
-                    console.log("update_message: push notification------sender side:------sent to send basic notification")
-                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", temp, temp).catch((e) => console.log('Error push notification for sender-----', JSON.stringify(e)))
+                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", senderRes.devicetype == 0 ? {} : temp, senderRes.devicetype == 0 ? temp : {}).catch((e) => console.log('Error push notification for sender-----', JSON.stringify(e)))
                 }
             } catch (e) {
                 console.log(e)
@@ -284,16 +264,12 @@ const connection = async (server) => {
                         ...result
                     })
                 }
-                console.log("senderRes", senderRes)
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
                     console.log("Sender received")
                     io.to(senderRes.socketId).emit("post_receive_message", {
                         ...result
                     })
                 }
-                console.log("")
-                console.log("")
-                console.log("")
             } catch (e) {
                 console.log(e)
             }
@@ -312,7 +288,7 @@ const connection = async (server) => {
 
 
         socket.on("disconnect_client", async (data) => {
-            console.log("Disconnect method:", JSON.stringify(data))
+            console.log("Disconnect client method:", JSON.stringify(data))
             await userModel.updateOne({
                 _id: new ObjectId(data.user_id)
             }, {
