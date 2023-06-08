@@ -100,11 +100,13 @@ const connection = async (server) => {
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`
                 }
                 if (data.media_type < 2 && receiver && receiver.socketId && receiver.socketId != "") {
+                    console.log("send message: --------socket message--------")
                     io.to(receiver.socketId).emit("receive_message", {
                         ...data
                     })
                 }
                 if (data.media_type < 2 && receiver.currentChatUser != data.from) {
+                    console.log("send message: --------push notification message--------")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", receiver.devicetype == 0 ? {} : temp, temp).catch((e) => console.log('console.log in socket file-----', e))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
