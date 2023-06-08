@@ -181,12 +181,16 @@ const connection = async (server) => {
                     sound: "notification_sound",
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
                 }
+                console.log("data",data)
+                console.log("receiver",receiver)
                 if (receiver && receiver.socketId && receiver.socketId != "") {
+                    console.log("socket connection: -----receiver")
                     io.to(receiver.socketId).emit("receive_message", {
                         ...data
                     })
                 }
                 if (receiver.currentChatUser != data.from) {
+                    console.log("push notification: -----receiver")
                     await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", receiver.devicetype == 0 ? {} : temp, temp).catch((e) => console.log('Error push notification for receiver-----', JSON.stringify(e)))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
