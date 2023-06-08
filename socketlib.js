@@ -48,6 +48,7 @@ const connection = async (server) => {
                     currentChatUser: 1,
                     devicetype: 1
                 })
+                console.log("data.media_type < 2 && receiver.currentChatUser == data.from",data.media_type < 2 && receiver.currentChatUser == data.from ? true : false)
                 let res = await messageModel.create({
                     conversationId: new ObjectId(data.conversationId),
                     createdBy: new ObjectId(data.from),
