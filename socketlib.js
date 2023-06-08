@@ -104,7 +104,7 @@ const connection = async (server) => {
                     })
                 }
                 if (data.media_type < 2 && receiver.currentChatUser != data.from) {
-                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", receiver.devicetype == 0 ? {} : temp, receiver.devicetype == 0 ? temp : {}).catch((e) => console.log('console.log in socket file-----', e))
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", receiver.devicetype == 0 ? {} : temp, temp).catch((e) => console.log('console.log in socket file-----', e))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
                     io.to(senderRes.socketId).emit("receive_message", {
@@ -112,7 +112,7 @@ const connection = async (server) => {
                     })
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId == "") {
-                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", senderRes.devicetype == 0 ? {} : temp, senderRes.devicetype == 0 ? temp : {}).catch((e) => console.log('console.log in socket file-----', e))
+                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", senderRes.devicetype == 0 ? {} : temp, temp).catch((e) => console.log('console.log in socket file-----', e))
                 }
             } catch (e) {
                 console.log(e)
@@ -183,7 +183,7 @@ const connection = async (server) => {
                     })
                 }
                 if (receiver.currentChatUser != data.from) {
-                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", receiver.devicetype == 0 ? {} : temp, receiver.devicetype == 0 ? temp : {}).catch((e) => console.log('Error push notification for receiver-----', JSON.stringify(e)))
+                    await commonFunction.sendBasicNotifications(receiver.fcmtoken, "13", receiver.devicetype == 0 ? {} : temp, temp).catch((e) => console.log('Error push notification for receiver-----', JSON.stringify(e)))
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId != "") {
                     io.to(senderRes.socketId).emit("receive_message", {
@@ -191,7 +191,7 @@ const connection = async (server) => {
                     })
                 }
                 if (senderRes && senderRes.socketId && senderRes.socketId == "") {
-                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", senderRes.devicetype == 0 ? {} : temp, senderRes.devicetype == 0 ? temp : {}).catch((e) => console.log('Error push notification for sender-----', JSON.stringify(e)))
+                    await commonFunction.sendBasicNotifications(senderRes.fcmtoken, "13", senderRes.devicetype == 0 ? {} : temp, temp).catch((e) => console.log('Error push notification for sender-----', JSON.stringify(e)))
                 }
             } catch (e) {
                 console.log(e)
