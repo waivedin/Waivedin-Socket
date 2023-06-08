@@ -92,7 +92,7 @@ const connection = async (server) => {
                     mediaUrl: data.mediaUrl,
                     media_type: data.media_type,
                     body: data.media_type == 1 ? data.message : data.media_type == 2 ? `📷 Photo` : data.media_type == 3 ? `🎥 Video` : `🎧 Audio`  ,
-                    gender: senderRes.gender,
+                    gender: senderRes.gender == "Male" ? 1 : senderRes.gender == "Female" ? 2 : 0,
                     thumbNail: data.thumbNail ? data.thumbNail : "",
                     sound: "notification_sound",
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`
@@ -184,7 +184,7 @@ const connection = async (server) => {
                     mediaUrl: data.mediaUrl,
                     media_type: data.media_type,
                     body: data.media_type == 1 ? data.message : data.media_type == 2 ? `📷 Photo` : data.media_type == 3 ? `🎥 Video` : `🎧 Audio`  ,
-                    gender: senderRes.gender,
+                    gender: senderRes.gender == "Male" ? 1 : senderRes.gender == "Female" ? 2 : 0,
                     thumbNail: data.thumbNail ? data.thumbNail : "",
                     sound: "notification_sound",
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
