@@ -35,25 +35,6 @@ const connection = async (server) => {
                 console.log("send message data:", JSON.stringify(data))
                 data.media_type = data['mediaType'] = data.media_type ? data.media_type : 1
                 data.messageDelivered = 0
-                let res = await messageModel.create({
-                    conversationId: new ObjectId(data.conversationId),
-                    createdBy: new ObjectId(data.from),
-                    media_type: data.media_type,
-                    text: data.message,
-                    mediaUrl: data.mediaUrl ? data.mediaUrl : "",
-                    thumbNail: data.thumbNail ? data.thumbNail : "",
-                    createdDate: data.timestamp,
-                    modifiedDate: data.timestamp,
-                    isDelivered: data.media_type != 3 ? true : false,
-                    messageDelivered: data.messageDelivered
-                })
-                await conversationModel.updateOne({
-                    _id: new ObjectId(data.conversationId)
-                }, {
-                    $set: {
-                        modifiedDate: data.timestamp
-                    }
-                })
                 let receiver = await userModel.findOne({
                     _id: new ObjectId(data.to)
                 }, {
@@ -66,6 +47,26 @@ const connection = async (server) => {
                     profilepic: 1,
                     currentChatUser: 1,
                     devicetype: 1
+                })
+                let res = await messageModel.create({
+                    conversationId: new ObjectId(data.conversationId),
+                    createdBy: new ObjectId(data.from),
+                    media_type: data.media_type,
+                    text: data.message,
+                    mediaUrl: data.mediaUrl ? data.mediaUrl : "",
+                    thumbNail: data.thumbNail ? data.thumbNail : "",
+                    createdDate: data.timestamp,
+                    modifiedDate: data.timestamp,
+                    isDelivered: data.media_type != 3 ? true : false,
+                    messageDelivered: data.messageDelivered,
+                    readStatus: receiver.currentChatUser == data.from ? true : false
+                })
+                await conversationModel.updateOne({
+                    _id: new ObjectId(data.conversationId)
+                }, {
+                    $set: {
+                        modifiedDate: data.timestamp
+                    }
                 })
                 let senderRes = await userModel.findOne({
                     _id: new ObjectId(data.from)
@@ -122,18 +123,6 @@ const connection = async (server) => {
         socket.on("update_message", async (data) => {
             try {
                 data.messageDelivered = 1
-                await messageModel.findOneAndUpdate({
-                    _id: new ObjectId(data.msg_id)
-                }, {
-                    $set: {
-                        modifiedDate: data.timestamp,
-                        mediaUrl: data.mediaUrl,
-                        thumbNail: data.thumbNail,
-                        text: data.message,
-                        isDelivered: true,
-                        messageDelivered: data.messageDelivered
-                    }
-                })
                 let receiver = await userModel.findOne({
                     _id: new ObjectId(data.to)
                 }, {
@@ -146,6 +135,19 @@ const connection = async (server) => {
                     profilepic: 1,
                     currentChatUser: 1,
                     devicetype: 1
+                })
+                await messageModel.findOneAndUpdate({
+                    _id: new ObjectId(data.msg_id)
+                }, {
+                    $set: {
+                        modifiedDate: data.timestamp,
+                        mediaUrl: data.mediaUrl,
+                        thumbNail: data.thumbNail,
+                        text: data.message,
+                        isDelivered: true,
+                        messageDelivered: data.messageDelivered,
+                        readStatus: receiver.currentChatUser == data.from ? true : false
+                    }
                 })
                 let senderRes = await userModel.findOne({
                     _id: new ObjectId(data.from)
