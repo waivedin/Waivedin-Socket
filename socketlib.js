@@ -59,7 +59,7 @@ const connection = async (server) => {
                     modifiedDate: data.timestamp,
                     isDelivered: data.media_type != 3 ? true : false,
                     messageDelivered: data.messageDelivered,
-                    readStatus: receiver.currentChatUser == data.from ? true : false
+                    readStatus: data.media_type < 2 && receiver.currentChatUser == data.from ? true : false
                 })
                 await conversationModel.updateOne({
                     _id: new ObjectId(data.conversationId)
