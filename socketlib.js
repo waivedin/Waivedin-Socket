@@ -32,7 +32,7 @@ const connection = async (server) => {
 
         socket.on("send_message", async (data) => {
             try {
-                console.log("send message data:", JSON.stringify(data))
+                console.log("send message data:", data)
                 data.media_type = data['mediaType'] = data.media_type ? data.media_type : 1
                 data.messageDelivered = 0
                 let receiver = await userModel.findOne({
@@ -99,6 +99,9 @@ const connection = async (server) => {
                     sound: "notification_sound",
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`
                 }
+                console.log("data",data)
+                console.log("receiver", receiver)
+                console.log("senderRes", senderRes)
                 if (data.media_type < 2 && receiver && receiver.socketId && receiver.socketId != "") {
                     console.log("send message: --------socket message--------")
                     io.to(receiver.socketId).emit("receive_message", {
@@ -182,7 +185,8 @@ const connection = async (server) => {
                     image: `https://wavedinblobs.blob.core.windows.net/wavedinblobs/profilepic/${senderRes.profilepic}`,
                 }
                 console.log("data",data)
-                console.log("receiver",receiver)
+                console.log("receiver", receiver)
+                console.log("senderRes", senderRes)
                 if (receiver && receiver.socketId && receiver.socketId != "") {
                     console.log("socket connection: -----receiver")
                     io.to(receiver.socketId).emit("receive_message", {
