@@ -295,7 +295,7 @@ const connection = async (server) => {
                 let res = await commentModel.findOneAndDelete({_id: commentId, userId})
                 if(res){
                     await postModel.updateOne({_id: res.postId},{$inc: {commentCount: -1}})
-                    io.sockets.emit("comment_delete_update_response",{postId: res.postId,commentId})
+                    io.sockets.emit("comment_delete_update_response",{postId: res.postId,commentId,userId})
                 }
             } catch (e) {
                 console.log(e)
