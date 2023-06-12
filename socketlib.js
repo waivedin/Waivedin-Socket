@@ -287,6 +287,21 @@ const connection = async (server) => {
             }
         });
 
+        socket.on("delete_comment", async (data) => {
+            try {
+                console.log("delete comment request body:---", JSON.stringify(data))
+                let commentId = new ObjectId(data.commentId)
+                let userId = new ObjectId(data.userId)
+                let res = await commentModel.findOneAndDelete({_id: commentId, userId})
+                if(res){
+                    await postModel.updateOne({_id: res.postId},{$inc: {commentCount: -1}})
+                    io.sockets.emit("comment_delete_update_response",{postId: res.postId,commentId})
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        });
+
         socket.on("updateCurrentChatUser", async (data) => {
             try {
                 console.log("updateCurrentChatUser", JSON.stringify(data))
