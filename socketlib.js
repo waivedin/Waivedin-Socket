@@ -4,6 +4,7 @@ const messageModel = require('./model/message');
 const conversationModel = require('./model/conversation');
 const commentModel = require('./model/comment');
 const postModel = require('./model/post');
+const notificationModel = require('./model/notification');
 const commonFunction = require('./commonFunction');
 const UserDetail = require('./model/users');
 const {
@@ -257,6 +258,24 @@ const connection = async (server) => {
                     gender: 1,
                     socketId: 1
                 })
+                let notificationResponse = await notificationModel.create({
+                    userId: senderRes._id,
+                    notifyuserId: receiverRes._id,
+                    profilePic: senderRes.profilepic,
+                    displayName: senderRes.displayName,
+                    isRead: false,
+                    allowAnonymous: false,
+                    postId: data.postId,
+                    // threadId: threadId,
+                    isAccept: true,
+                    gender: senderRes.gender === "Male" ? 1 : (senderRes.gender === "Female") ? 2 : 0,
+                    isShowButton: true,
+                    typeOfNotify: 14,
+                    message: 'have commented on your post',
+                    createdDate: getDate(),
+                    modifiedDate: getDate()
+                });
+                console.log("notificationResponse",notificationResponse)
                 let result = {
                     postId,
                     msg_id: res._id,
