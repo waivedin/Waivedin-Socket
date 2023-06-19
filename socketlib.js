@@ -272,8 +272,8 @@ const connection = async (server) => {
                     isShowButton: true,
                     typeOfNotify: 14,
                     message: 'have commented on your post',
-                    createdDate: getDate(),
-                    modifiedDate: getDate()
+                    createdDate: commonFunction.getDate(),
+                    modifiedDate: commonFunction.getDate()
                 });
                 console.log("notificationResponse",notificationResponse)
                 let result = {
