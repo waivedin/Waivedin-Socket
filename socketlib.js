@@ -231,12 +231,12 @@ const connection = async (server) => {
                 })
                 let receiverRes = await userModel.findOne({
                     _id: postRes.userId,
-                    socketId: {
-                        $exists: true
-                    },
-                    socketId: {
-                        $ne: ""
-                    }
+                    // socketId: {
+                    //     $exists: true
+                    // },
+                    // socketId: {
+                    //     $ne: ""
+                    // }
                 }, {
                     displayName: 1,
                     profilepic: 1,
@@ -246,12 +246,12 @@ const connection = async (server) => {
                 })
                 let senderRes = await userModel.findOne({
                     _id: new ObjectId(data.userId),
-                    socketId: {
-                        $exists: true
-                    },
-                    socketId: {
-                        $ne: ""
-                    }
+                    // socketId: {
+                    //     $exists: true
+                    // },
+                    // socketId: {
+                    //     $ne: ""
+                    // }
                 }, {
                     displayName: 1,
                     profilepic: 1,
