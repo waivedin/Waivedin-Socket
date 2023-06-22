@@ -14,8 +14,6 @@ const {
 
 const connection = async (server) => {
     io.sockets.on("connection", (socket) => {
-        socket.emit("connect_server", {})
-        
         socket.on("client_server", async (data) => {
             try {
                 console.log("socket.id emitted:", socket.id)
@@ -258,24 +256,25 @@ const connection = async (server) => {
                     gender: 1,
                     socketId: 1
                 })
-                let notificationResponse = await notificationModel.create({
-                    userId: senderRes._id,
-                    notifyuserId: receiverRes._id,
-                    profilePic: senderRes.profilepic,
-                    displayName: senderRes.displayName,
-                    isRead: false,
-                    allowAnonymous: false,
-                    postId: data.postId,
-                    // threadId: threadId,
-                    isAccept: true,
-                    gender: senderRes.gender === "Male" ? 1 : (senderRes.gender === "Female") ? 2 : 0,
-                    isShowButton: true,
-                    typeOfNotify: 14,
-                    message: 'have commented on your post',
-                    createdDate: commonFunction.getDate(),
-                    modifiedDate: commonFunction.getDate()
-                });
-                console.log("notificationResponse",notificationResponse)
+                if(data.userId != postRes.userId.toString()){
+                    await notificationModel.create({
+                        userId: senderRes._id,
+                        notifyuserId: receiverRes._id,
+                        profilePic: senderRes.profilepic,
+                        displayName: senderRes.displayName,
+                        isRead: false,
+                        allowAnonymous: false,
+                        postId: data.postId,
+                        // threadId: threadId,
+                        isAccept: true,
+                        gender: senderRes.gender === "Male" ? 1 : (senderRes.gender === "Female") ? 2 : 0,
+                        isShowButton: true,
+                        typeOfNotify: 14,
+                        message: 'have commented on your post',
+                        createdDate: commonFunction.getDate(),
+                        modifiedDate: commonFunction.getDate()
+                    });
+                }
                 let result = {
                     postId,
                     msg_id: res._id,
@@ -330,8 +329,6 @@ const connection = async (server) => {
                 console.log(e)
             }
         });
-
-
 
         socket.on("disconnect_client", async (data) => {
             console.log("Disconnect client method:", JSON.stringify(data))
