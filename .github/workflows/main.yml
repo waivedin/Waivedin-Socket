@@ -28,7 +28,9 @@ jobs:
         - run: |
             docker build -t waivedinsocket:latest .
             docker tag waivedinsocket:latest waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
+            docker tag waivedinsocket:latest waivedinsocket.azurecr.io/waivedin-socket:latest
             docker push waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
+            docker push waivedinsocket.azurecr.io/waivedin-socket:latest
          
       # Pull the image from Azure Container Registry
         - name: 'Pull image'
