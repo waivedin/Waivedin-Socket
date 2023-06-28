@@ -28,7 +28,9 @@ jobs:
         - run: |
             docker build -t waivedinsocket:latest .
             docker tag waivedinsocket:latest waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
+            docker tag waivedinsocket:latest waivedinsocket.azurecr.io/waivedin-socket:latest
             docker push waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
+            docker push waivedinsocket.azurecr.io/waivedin-socket:latest
          
       # Pull the image from Azure Container Registry
         - name: 'Pull image'
@@ -43,6 +45,7 @@ jobs:
            username: ${{ secrets.STAGING_SSH_USER }}
            key: ${{ secrets.SSH_KEY }}
            script: |
-            docker stop waivedin-socket || true
-            docker rm waivedin-socket || true
-            docker run -d -p 3000:3000 --name waivedin-socket waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
+              bash pull.bash
+            # docker stop waivedin-socket || true
+            # docker rm waivedin-socket || true
+            # docker run -d -p 3000:3000 --name waivedin-socket waivedinsocket.azurecr.io/waivedin-socket:${{ github.sha }}
