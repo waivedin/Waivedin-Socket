@@ -14,6 +14,8 @@ const {
 
 const connection = async (server) => {
     io.sockets.on("connection", (socket) => {
+        socket.emit("connect_server", {})
+
         socket.on("client_server", async (data) => {
             try {
                 console.log("socket.id emitted:", socket.id)
