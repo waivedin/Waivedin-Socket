@@ -258,7 +258,9 @@ const connection = async (server) => {
                     gender: 1,
                     socketId: 1
                 })
+                console.log("receiverRes.socketId",receiverRes.socketId)
                 if(data.userId != postRes.userId.toString() && receiverRes.socketId == ""){
+                    console.log("notification created")
                     await notificationModel.create({
                         userId: senderRes._id,
                         notifyuserId: receiverRes._id,
